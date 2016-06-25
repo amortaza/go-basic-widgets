@@ -1,10 +1,10 @@
 package button
 
 import (
-	"bellina"
-	"plugin/mouse-hover"
-	"plugin/click"
+	"github.com/amortaza/go-bellina-plugins/mouse-hover"
+	"github.com/amortaza/go-bellina-plugins/click"
 	"fmt"
+	"github.com/amortaza/go-bellina"
 )
 
 type Plugin struct {
@@ -38,6 +38,11 @@ func (c *Plugin) On(cb func(interface{})) {
 
 var State *ButtonState
 
+func ID(id string, onClick func()) {
+	Div(id)
+	OnClick(onClick)
+	End()
+}
 func Div(id string) {
 
 	State = getOrCreateState(id)
@@ -52,7 +57,6 @@ func Div(id string) {
 
 		if State.IsHover {
 			bl.Color(.3, .3, .0)
-
 		}
 
 		if State.IsDown {
@@ -76,12 +80,14 @@ func Label(label string) {
 	bl.Label(label)
 }
 
-func OnHover(cb func(*mouse_hover.Event)) {
+func OnHover(cb func()) {
 	bl.On("hover", func(i interface{}){
-		e := i.(*mouse_hover.Event)
-
-		cb(e)
+		cb()
 	})
+}
+
+func OnClick(cb func()) {
+	State.onClick = cb
 }
 
 func End() {
@@ -101,21 +107,24 @@ func End() {
 
 		// click
 		func(i interface{}) {
-			//fmt.Println("click")
 			state.IsDown = false
 			fmt.Println("click")
+
+			if state.onClick != nil {
+				state.onClick()
+			}
 		},
 
 		// on down
 		func(i interface{}) {
 			state.IsDown = true
-			fmt.Println("down")
+			//fmt.Println("down")
 		},
 
 		// on miss
 		func(i interface{}) {
 			state.IsDown = false
-			fmt.Println("miss")
+			//fmt.Println("miss")
 		} )
 
 	bl.End()

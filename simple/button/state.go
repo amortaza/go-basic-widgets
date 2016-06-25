@@ -3,6 +3,8 @@ package button
 type ButtonState struct {
 	IsHover bool
 	IsDown bool
+
+	onClick func()
 }
 
 var g_stateByButtonId map[string] *ButtonState
