@@ -3,7 +3,6 @@ package button
 import (
 	"github.com/amortaza/go-bellina-plugins/mouse-hover"
 	"github.com/amortaza/go-bellina-plugins/click"
-	"fmt"
 	"github.com/amortaza/go-bellina"
 )
 
@@ -19,6 +18,10 @@ func (c *Plugin) Init() {
 	bl.Plugin( mouse_hover.NewPlugin() )
 
 	g_stateByButtonId = make(map[string] *ButtonState)
+}
+
+func (c *Plugin) GetState() interface{} {
+	return nil
 }
 
 func (c *Plugin) Tick() {
@@ -108,7 +111,6 @@ func End() {
 		// click
 		func(i interface{}) {
 			state.IsDown = false
-			fmt.Println("click")
 
 			if state.onClick != nil {
 				state.onClick()
@@ -124,7 +126,6 @@ func End() {
 		// on miss
 		func(i interface{}) {
 			state.IsDown = false
-			//fmt.Println("miss")
 		} )
 
 	bl.End()
