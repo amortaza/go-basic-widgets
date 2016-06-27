@@ -5,6 +5,7 @@ import (
 	"github.com/amortaza/go-xel"
 	"math"
 	"github.com/amortaza/go-bellina"
+	"github.com/amortaza/go-bellina/core"
 )
 
 var cursorCycle float64
@@ -63,6 +64,22 @@ func Div(editId string) {
 			editInfo.hasFocus = false
 		})
 	}
+}
+
+func Extend(maxLimit int32) {
+
+	shadow, _ := bl.GetShadow()
+	editId := shadow.Id
+
+	substr := GetText(editId)
+
+	fontname, fontsize := bl.GetFont()
+
+	g4font := core.GetG4Font(fontname, fontsize)
+
+	test := int32(math.Max( float64(editWidth), float64(g4font.Width(substr + "  ") )))
+
+	editWidth = int32(math.Min(float64(test), float64(maxLimit)))
 }
 
 func End() {
