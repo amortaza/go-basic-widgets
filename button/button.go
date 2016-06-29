@@ -1,7 +1,7 @@
 package button
 
 import (
-	"github.com/amortaza/go-bellina-plugins/mouse-hover"
+	"github.com/amortaza/go-bellina-plugins/hover"
 	"github.com/amortaza/go-bellina-plugins/click"
 	"github.com/amortaza/go-bellina"
 )
@@ -15,7 +15,7 @@ func (c *Plugin) Name() string {
 
 func (c *Plugin) Init() {
 	bl.Plugin( click.NewPlugin() )
-	bl.Plugin( mouse_hover.NewPlugin() )
+	bl.Plugin( hover.NewPlugin() )
 
 	g_stateByButtonId = make(map[string] *ButtonState)
 }
@@ -84,7 +84,7 @@ func Label(label string) {
 }
 
 func OnHover(cb func()) {
-	bl.On("hover", func(i interface{}){
+	hover.On( func(i interface{}){
 		cb()
 	})
 }
@@ -96,8 +96,8 @@ func OnClick(cb func()) {
 func End() {
 	state := State
 
-	bl.On("hover", func(i interface{}){
-		e := i.(*mouse_hover.Event)
+	hover.On(func(i interface{}){
+		e := i.(*hover.Event)
 
 		if e.IsInEvent {
 			state.IsHover = true
@@ -106,7 +106,7 @@ func End() {
 		}
 	})
 
-	bl.On2("click",
+	click.On2(
 
 		// click
 		func(i interface{}) {

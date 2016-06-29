@@ -48,7 +48,7 @@ func Div(editId string) {
 		bl.Font("tahoma", 5)
 		bl.FontColor(0,0,0)
 		
-		bl.On2("focus", func(focusEvent interface{}) {
+		focus.On2( func(focusEvent interface{}) {
 			e := focusEvent.(focus.Event)
 
 			if e.KeyEvent.Action == xel.Button_Action_Down {
