@@ -52,7 +52,7 @@ func Div(id string) {
 
 	bl.Div()
 	{
-		bl.ID(id)
+		bl.Id(id)
 		bl.Pos(10, 10)
 		bl.Dim(96,48)
 
@@ -66,7 +66,7 @@ func Div(id string) {
 			bl.Color(.6, .6, .1)
 		}
 
-		bl.BorderThickness([]int32{1,1,1,1})
+		bl.BorderThickness([]int{1,1,1,1})
 		bl.BorderColor(.6,.6,.1)
 		bl.BorderTopsCanvas()
 

@@ -19,13 +19,13 @@ func (c *Plugin) Tick() {
 	cursorCycle += .4
 }
 
-var fontNudgeLeft int32 = 4
-var fontNudgeTop int32 = 5
+var fontNudgeLeft = 4
+var fontNudgeTop = 5
 
-var editWidth int32
-var paddingLeft int32
-var paddingTop int32
-var paddingBottom int32
+var editWidth int
+var paddingLeft int
+var paddingTop int
+var paddingBottom int
 
 func Div(editId string) {
 	editWidth = 200  // default
@@ -37,7 +37,7 @@ func Div(editId string) {
 
 	bl.Div()
 	{
-		bl.ID(editId)
+		bl.Id(editId)
 
 		shadow := bl.EnsureShadow()
 

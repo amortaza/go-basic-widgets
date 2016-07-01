@@ -61,7 +61,7 @@ func (c *Plugin) On(cb func(interface{})) {
 	// divider
 	bl.Div()
 	{
-		bl.ID(dividerId)
+		bl.Id(dividerId)
 		bl.Pos(dividerLeft,0)
 		bl.Dim(dividerWidth,cur.Width)
 		bl.Color(.61,.61,0)
