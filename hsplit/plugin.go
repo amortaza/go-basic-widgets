@@ -46,6 +46,7 @@ func get2Kids(node *bl.Node)(kid1, kid2 *bl.Node) {
 }
 
 func (c *Plugin) On(cb func(interface{})) {
+	logic()
 	cur := bl.Current_Node
 	parentId := cur.Id
 
