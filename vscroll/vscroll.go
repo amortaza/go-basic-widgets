@@ -4,7 +4,7 @@ import (
 	"github.com/amortaza/go-bellina"
 )
 
-func SetThickness(thickness int32) {
+func SetThickness(thickness int) {
 	bl.SetI(NAME, "thickness", thickness)
 }
 

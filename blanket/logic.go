@@ -19,6 +19,7 @@ func logic() {
 		bl.Color(.1,.1,.1)
 		bl.NodeOpacity1f(.5)
 
+		bl.PreventBubbling()
 	}
 	bl.End()
 }

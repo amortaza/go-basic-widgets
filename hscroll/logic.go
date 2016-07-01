@@ -24,7 +24,7 @@ func logic(scrollId_postfix string, cb func(interface{})) {
 			bl.Id(handleId)
 			bl.Pos(0,0)
 
-			var handleWidth int32 = 80
+			var handleWidth int = 80
 
 			bl.Dim(handleWidth,thickness)
 
@@ -36,10 +36,10 @@ func logic(scrollId_postfix string, cb func(interface{})) {
 
 				totalWidth := handle.Parent.Width
 
-				handleLeft := int32(math.Max(0, float64(handle.Left)))
+				handleLeft := int(math.Max(0, float64(handle.Left)))
 
 				maxLeft := totalWidth - handle.Width
-				handleLeft = int32(math.Min(float64(maxLeft), float64(handleLeft)))
+				handleLeft = int(math.Min(float64(maxLeft), float64(handleLeft)))
 
 				bl.EnsureShadowByNode(handle).PosLeft(handleLeft)
 				bl.EnsureShadowByNode(handle).PosTop(0)
