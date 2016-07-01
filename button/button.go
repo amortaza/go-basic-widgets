@@ -6,6 +6,8 @@ import (
 	"github.com/amortaza/go-bellina"
 )
 
+var plugin *Plugin
+
 type Plugin struct {
 }
 
@@ -14,9 +16,6 @@ func (c *Plugin) Name() string {
 }
 
 func (c *Plugin) Init() {
-	bl.Plugin( click.NewPlugin() )
-	bl.Plugin( hover.NewPlugin() )
-
 	g_stateByButtonId = make(map[string] *ButtonState)
 }
 
@@ -132,12 +131,11 @@ func End() {
 }
 
 func (c *Plugin) On2(cb func(interface{}), start func(interface{}), end func(interface{})) {
-	panic("On2 not supoorted in click.Plugin")
+	panic("On2 not supoorted in button plugin")
 }
 
-func NewPlugin() *Plugin {
-	c := &Plugin{}
-
-	return c
+func init() {
+	plugin = &Plugin{}
+	bl.Plugin(plugin)
 }
 

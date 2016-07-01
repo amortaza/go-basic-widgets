@@ -23,8 +23,6 @@ func (c *Plugin) GetState() interface{} {
 }
 
 func (c *Plugin) Init() {
-	bl.Plugin( focus.NewPlugin() )
-
 	g_editInfoByEditId = make(map[string] *EditInfo)
 }
 
@@ -33,12 +31,6 @@ func (c *Plugin) Uninit() {
 
 func (c *Plugin) On2(cb func(interface{}), start func(interface{}), end func(interface{})) {
 	panic("On2 not supported for edit plugin")
-}
-
-func NewPlugin() *Plugin {
-	c := &Plugin{}
-
-	return c
 }
 
 func insertChar(src string, pos int, char string) string {

@@ -10,6 +10,7 @@ import (
 
 var cursorCycle float64
 var cursorOpacity float32
+var plugin *Plugin
 
 func (c *Plugin) Tick() {
 
@@ -115,3 +116,7 @@ func End() {
 	bl.End()
 }
 
+func init() {
+	plugin = &Plugin{}
+	bl.Plugin(plugin)
+}

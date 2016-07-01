@@ -114,8 +114,3 @@ func (c *Plugin) On2(cb func(interface{}), onDown func(interface{}), onUpAndMiss
 	panic("On2 not supported for hsplit")
 }
 
-func NewPlugin() *Plugin {
-	plugin = &Plugin{}
-
-	return plugin
-}
