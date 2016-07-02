@@ -4,23 +4,33 @@ import (
 	"github.com/amortaza/go-bellina"
 )
 
-func SetThickness(thickness int) {
-	bl.SetI(NAME, "thickness", thickness)
+type State struct {
+	VScrollId string
+	Thickness_ int
 }
 
-func Use() {
-	plugin.On(nil)
+var gCurState *State
+
+func Id(postfixId string) *State {
+	Id := bl.Current_Node.Id + "/" + postfixId
+
+	gCurState = ensureState(Id)
+
+	return gCurState
 }
 
-func On(cb func(interface{})) {
-	plugin.On(cb)
+func (s *State) Thickness(thickness int) (*State) {
+	s.Thickness_ = thickness
+
+	return s
 }
 
+func (s *State) On(cb func(interface{})) {
+	logic(s, cb)
+}
 
-func Div(scrollId_postfix string) {
-	parentId := bl.Current_Node.Id
-	scrollId := parentId + scrollId_postfix
-	bl.DivId(scrollId)
+func Div() {
+	bl.DivId(gCurState.VScrollId)
 }
 
 func End() {

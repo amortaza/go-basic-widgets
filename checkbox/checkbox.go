@@ -10,22 +10,38 @@ const (
 	Checked
 )
 
+func Id(postfixCheckboxId string) *State {
+	checkboxId := bl.Current_Node.Id + "/" + postfixCheckboxId
+
+	return EnsureState(checkboxId)
+}
+
 type State struct {
+	CheckboxId string
 	Label string
 	CheckState CheckboxState
 	checkStateAtStart CheckboxState
 }
 
-func Id(id string) *Plugin {
-	gId = bl.Current_Node.Id + "/" + id
+func (s *State) SetLabel(label string) *State {
+	s.Label = label
 
-	return plugin
+	return s
 }
 
-func SetLabel(label string) *Plugin {
-	ensureState(gId).Label = label
+func (s *State) On(cb func(interface{})) {
+	logic(s, cb)
+}
 
-	return plugin
+func EnsureState(checkboxId string) *State {
+	state, ok := gStateByNode[checkboxId]
+
+	if !ok {
+		state = &State{CheckboxId: checkboxId}
+		gStateByNode[checkboxId] = state
+	}
+
+	return state
 }
 
 func init() {

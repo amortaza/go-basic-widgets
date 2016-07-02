@@ -21,6 +21,7 @@ func (c *Plugin) Name() string {
 }
 
 func (c *Plugin) Init() {
+	gStateByNode = make(map[string] *State)
 }
 
 func (c *Plugin) Tick() {
@@ -36,13 +37,5 @@ func (c *Plugin) OnNodeRemoved(node *bl.Node) {
 }
 
 func (c *Plugin) Uninit() {
-}
-
-func (c *Plugin) On(cb func(interface{})) {
-	logic("one", cb)
-}
-
-func (c *Plugin) On2(cb func(interface{}), onDown func(interface{}), onUpAndMiss func(interface{})) {
-	panic("On2 not supported for hscroll")
 }
 

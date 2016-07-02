@@ -6,11 +6,12 @@ import (
 	"github.com/amortaza/go-bellina-plugins/drag"
 )
 
-func logic(scrollId_postfix string, cb func(interface{})) {
-	parent := bl.Current_Node
-	scrollId := parent.Id + scrollId_postfix
+var gStateByNode map[string] *State
+
+func logic(state *State, cb func(interface{})) {
+	scrollId := state.VScrollId
 	handleId := scrollId + ":handle"
-	thickness := bl.GetI(NAME, "thickness")
+	thickness := state.Thickness_
 
 	bl.Div()
 	{
@@ -61,4 +62,15 @@ func logic(scrollId_postfix string, cb func(interface{})) {
 
 func newEvent(pctStart, pctEnd float32) *Event {
 	return &Event{pctStart, pctEnd}
+}
+
+func ensureState(Id string) *State {
+	state, ok := gStateByNode[Id]
+
+	if !ok {
+		state = &State{VScrollId: Id}
+		gStateByNode[Id] = state
+	}
+
+	return state
 }

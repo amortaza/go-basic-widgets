@@ -2,8 +2,18 @@ package hsplit
 
 import "github.com/amortaza/go-bellina"
 
-func Use() {
-	plugin.On(nil)
+var gCurState *State
+
+func Id(postfixId string) *State {
+	Id := bl.Current_Node.Id + "/" + postfixId
+
+	gCurState = ensureState(Id)
+
+	return gCurState
+}
+
+func Use(id string) {
+	Id(id).On(nil)
 }
 
 func init() {

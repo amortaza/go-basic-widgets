@@ -6,58 +6,53 @@ import (
 	"github.com/amortaza/go-bellina"
 )
 
-var plugin *Plugin
+type State struct {
+	ButtonId string
+	IsHover  bool
+	IsDown   bool
 
-type Plugin struct {
+	Label_   string
+
+	onClick  func()
 }
 
-func (c *Plugin) Name() string {
-	return "button"
+// Shared variable across Div()/End()
+var gCurState *State
+
+func Id(postfixButtonId string) *State {
+	buttonId := bl.Current_Node.Id + "/" + postfixButtonId
+
+	gCurState = ensureState(buttonId)
+
+	return gCurState
 }
 
-func (c *Plugin) Init() {
-	g_stateByButtonId = make(map[string] *ButtonState)
-}
+func (s *State) On(cb func(interface{})) {
 
-func (c *Plugin) Tick() {
-}
+	gCurState = s
 
-func (c *Plugin) OnNodeAdded(node *bl.Node) {
-}
-
-func (c *Plugin) OnNodeRemoved(node *bl.Node) {
-}
-
-func (c *Plugin) Uninit() {
-}
-
-func (c *Plugin) On(cb func(interface{})) {
-}
-
-var State *ButtonState
-
-func ID(id string, onClick func()) {
-	Div(id)
-	OnClick(onClick)
+	Div()
 	End()
 }
-func Div(id string) {
 
-	State = getOrCreateState(id)
+func Div() {
+
+	buttonId := gCurState.ButtonId
+	state := gCurState
 
 	bl.Div()
 	{
-		bl.Id(id)
+		bl.Id(buttonId)
 		bl.Pos(10, 10)
 		bl.Dim(96,48)
 
 		bl.Color(.21, .21, 0)
 
-		if State.IsHover {
+		if state.IsHover {
 			bl.Color(.3, .3, .0)
 		}
 
-		if State.IsDown {
+		if state.IsDown {
 			bl.Color(.6, .6, .1)
 		}
 
@@ -68,14 +63,14 @@ func Div(id string) {
 		bl.Font("arial", 7)
 		bl.FontColor(1,1,1)
 		
-		bl.Label("OK")
-
 		bl.Flag(bl.Z_COLOR_SOLID | bl.Z_BORDER_ALL | bl.Z_LABEL_ALIGN_HCENTER | bl.Z_LABEL_ALIGN_VCENTER)
 	}
 }
 
-func Label(label string) {
-	bl.Label(label)
+func (s *State) Label(label string) (*State){
+	s.Label_ = label
+
+	return s
 }
 
 func OnHover(cb func()) {
@@ -85,11 +80,13 @@ func OnHover(cb func()) {
 }
 
 func OnClick(cb func()) {
-	State.onClick = cb
+	gCurState.onClick = cb
 }
 
 func End() {
-	state := State
+	state := gCurState
+
+	bl.Label(state.Label_)
 
 	hover.On(func(i interface{}){
 		e := i.(*hover.Event)
@@ -124,10 +121,6 @@ func End() {
 		} )
 
 	bl.End()
-}
-
-func (c *Plugin) On2(cb func(interface{}), start func(interface{}), end func(interface{})) {
-	panic("On2 not supoorted in button plugin")
 }
 
 func init() {

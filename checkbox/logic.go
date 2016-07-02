@@ -6,14 +6,11 @@ import (
 )
 
 var gStateByNode map[string] *State
-var gId string
 
-func logic(cb func(interface{})) {
-	cbid := gId
+func logic(state *State, cb func(interface{})) {
+	cbid := state.CheckboxId
 	ctrlid := cbid + "/ctrl"
 	tickid := ctrlid + "/tick"
-
-	state := ensureState(cbid)
 
 	bl.Div()
 	{
@@ -48,7 +45,7 @@ func logic(cb func(interface{})) {
 
 			click.On2(
 				func(v interface{}) {
-					state := ensureState(cbid)
+					state := EnsureState(cbid)
 
 					if state.checkStateAtStart == Checked{
 						state.CheckState = Unchecked
@@ -61,7 +58,7 @@ func logic(cb func(interface{})) {
 				},
 
 				func(v interface{}) {
-					state := ensureState(cbid)
+					state := EnsureState(cbid)
 
 					state.checkStateAtStart = state.CheckState
 
@@ -69,7 +66,7 @@ func logic(cb func(interface{})) {
 				},
 
 				func(v interface{}) {
-					state := ensureState(cbid)
+					state := EnsureState(cbid)
 
 					if state.CheckState == Semi {
 
@@ -111,13 +108,3 @@ func drawTick(id string, s CheckboxState) {
 
 }
 
-func ensureState(nodeid string) *State {
-	state, ok := gStateByNode[nodeid]
-
-	if !ok {
-		state = &State{}
-		gStateByNode[nodeid] = state
-	}
-
-	return state
-}

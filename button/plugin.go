@@ -1,4 +1,4 @@
-package checkbox
+package button
 
 import "github.com/amortaza/go-bellina"
 
@@ -8,7 +8,7 @@ type Plugin struct {
 }
 
 func (c *Plugin) Name() string {
-	return "checkbox"
+	return "button"
 }
 
 func (c *Plugin) Init() {
@@ -29,4 +29,5 @@ func (c *Plugin) OnNodeRemoved(node *bl.Node) {
 
 func (c *Plugin) Uninit() {
 }
+
 

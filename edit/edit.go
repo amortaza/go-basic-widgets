@@ -5,40 +5,28 @@ import (
 	"github.com/amortaza/go-xel"
 	"math"
 	"github.com/amortaza/go-bellina"
-	"github.com/amortaza/go-bellina/core"
 )
 
-var cursorCycle float64
-var cursorOpacity float32
-var plugin *Plugin
+var gCurState *State
 
-func (c *Plugin) Tick() {
+func Id(postfixId string) *State {
+	editId := bl.Current_Node.Id + "/" + postfixId
 
-	// There is only one cursor with blinking cursor, so this can be global "Tick"
+	gCurState = ensureState(editId)
 
-	cursorOpacity = float32((math.Sin(cursorCycle) + 1 ) / 2 + .5)
-	cursorCycle += .4
+	return gCurState
 }
 
-var fontNudgeLeft = 4
-var fontNudgeTop = 5
-
-var editWidth int
-var paddingLeft int
-var paddingTop int
-var paddingBottom int
-
-func Div(editId string) {
-	editWidth = 200  // default
+func Div() {
 	paddingLeft = 0  // default
 	paddingTop = 0  // default
 	paddingBottom = 0  // default
 
-	editInfo := ensureEditInfo(editId)
+	state := gCurState
 
 	bl.Div()
 	{
-		bl.Id(editId)
+		bl.Id(state.EditId)
 
 		shadow := bl.EnsureShadow()
 
@@ -54,33 +42,17 @@ func Div(editId string) {
 
 			if e.KeyEvent.Action == xel.Button_Action_Down {
 				key := e.KeyEvent.Key
-				processKeyDown(key, e.KeyEvent.Alt, e.KeyEvent.Ctrl, e.KeyEvent.Shift, shadow, editInfo)
+				processKeyDown(key, e.KeyEvent.Alt, e.KeyEvent.Ctrl, e.KeyEvent.Shift, shadow, state)
 			}
 
 		}, func(focusEvent interface{}) {
-			editInfo.hasFocus = true
-			editInfo.cursorPos = len(shadow.Label)
+			state.HasFocus = true
+			state.CursorPos = len(shadow.Label)
 
 		}, func(focusEvent interface{}) {
-			editInfo.hasFocus = false
+			state.HasFocus = false
 		})
 	}
-}
-
-func Extend(maxLimit int32) {
-
-	shadow, _ := bl.GetShadow()
-	editId := shadow.Id
-
-	substr := GetText(editId)
-
-	fontname, fontsize := bl.GetFont()
-
-	g4font := core.GetG4Font(fontname, fontsize)
-
-	test := int32(math.Max( float64(editWidth), float64(g4font.Width(substr + "  ") )))
-
-	editWidth = int32(math.Min(float64(test), float64(maxLimit)))
 }
 
 func End() {
@@ -89,17 +61,17 @@ func End() {
 	cursorHeight := fontheight + 6 // <<<
 	editHeight :=  cursorHeight + paddingTop + paddingBottom
 
-	shadow, _ := bl.GetShadow()
+	shadow := bl.EnsureShadow()
 	editId := shadow.Id
-	editInfo := ensureEditInfo(editId)
+	state := ensureState(editId)
 
-	bl.Dim(editWidth, editHeight)
+	bl.Dim(state.Width, editHeight)
 
 	bl.FontNudge(fontNudgeLeft + paddingLeft, fontNudgeTop + paddingTop)
 	bl.Label(shadow.Label)
 	parent := bl.Current_Node
 
-	if editInfo.hasFocus {
+	if state.HasFocus {
 		if math.Abs(float64(cursorOpacity)) > .9 {
 
 			cursorY := (editHeight - cursorHeight)/2 - 3 // <<<
@@ -107,7 +79,7 @@ func End() {
 			renderCursor(
 				editId,
 				cursorHeight,
-				paddingLeft + fontNudgeLeft + getCursorX(editInfo.cursorPos, shadow.Label, parent.FontName, parent.FontSize),
+				paddingLeft + fontNudgeLeft + getCursorX(state.CursorPos, shadow.Label, parent.FontName, parent.FontSize),
 				cursorY,
 			)
 		}
@@ -115,6 +87,32 @@ func End() {
 
 	bl.End()
 }
+
+/*
+func Pos(x,y int) *State {
+	bl.Pos(x,y)
+}
+
+func Size(size int) {
+	bl.Font("tahoma", size)
+}
+
+func Width(width int) {
+	editWidth = width
+}
+
+func Padding(left, top, bottom int) {
+	paddingLeft = left
+	paddingTop = top
+	paddingBottom = bottom
+}
+
+func GetText(editId string) string {
+	shadow := bl.EnsureShadowById(editId)
+
+	return shadow.Label
+}
+*/
 
 func init() {
 	plugin = &Plugin{}
