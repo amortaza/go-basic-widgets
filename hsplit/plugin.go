@@ -17,10 +17,6 @@ func (c *Plugin) Name() string {
 	return NAME
 }
 
-func (c *Plugin) GetState() interface{} {
-	return nil
-}
-
 func (c *Plugin) Init() {
 }
 

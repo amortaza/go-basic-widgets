@@ -19,10 +19,6 @@ func (c *Plugin) Init() {
 	g_stateByButtonId = make(map[string] *ButtonState)
 }
 
-func (c *Plugin) GetState() interface{} {
-	return nil
-}
-
 func (c *Plugin) Tick() {
 }
 

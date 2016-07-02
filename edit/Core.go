@@ -18,10 +18,6 @@ func (c *Plugin) Name() string {
 	return "edit"
 }
 
-func (c *Plugin) GetState() interface{} {
-	return nil
-}
-
 func (c *Plugin) Init() {
 	g_editInfoByEditId = make(map[string] *EditInfo)
 }
